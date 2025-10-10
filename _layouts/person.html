@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{{ page.name }} — {{ site.title }}</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ '/css/styles.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/css/styles.css' | relative_url }}" data-jekyll-fallback="true">
 </head>
 <body>
   <main class="ecard">
@@ -113,6 +113,34 @@
 
   </main>
 
-  <script src="{{ '/js/script.js' | relative_url }}"></script>
+  <script src="{{ '/js/script.js' | relative_url }}" data-jekyll-fallback="true"></script>
+
+  <!-- Fallback para cuando no se está sirviendo el sitio con Jekyll (p.ej. abrir archivos localmente) -->
+  <script>
+  (function(){
+    try{
+      // arregla hojas de estilo que aún contienen Liquid ("{{"), útil para vista por file://
+      var links = document.querySelectorAll('link[data-jekyll-fallback]');
+      links.forEach(function(l){
+        var href = l.getAttribute('href') || '';
+        if(href.indexOf('{') !== -1){
+          // ruta relativa válida desde la raíz del repo cuando se abre localmente
+          l.href = 'css/styles.css';
+        }
+      });
+
+      var scripts = document.querySelectorAll('script[data-jekyll-fallback]');
+      scripts.forEach(function(s){
+        var src = s.getAttribute('src') || '';
+        if(src.indexOf('{') !== -1){
+          s.src = 'js/script.js';
+        }
+      });
+    }catch(e){
+      // no hacemos nada si falla
+      console.warn('Jekyll fallback script error', e);
+    }
+  })();
+  </script>
 </body>
 </html>
