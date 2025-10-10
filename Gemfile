@@ -1,11 +1,13 @@
 source "https://rubygems.org"
 
-# Use the GitHub Pages gem (includes a set of supported Jekyll plugins)
-gem "github-pages", group: :jekyll_plugins
+# Use a pinned version of github-pages that is known to work with Jekyll 3.10
+# Pinning helps avoid sudden upstream dependency changes.
+gem "github-pages", "~> 232", group: :jekyll_plugins
 
-# Fix: explicitly include faraday-retry so GitHub Pages build can install it
-gem "faraday-retry"
+# Jekyll version compatible with the pinned github-pages
+gem "jekyll", "~> 3.10.0"
 
-# If you want to pin versions, uncomment and set versions below:
-# gem "github-pages", "~> 227"
-# gem "faraday-retry", "~> 1.0"
+# Faraday v2+ requires this middleware; include explicitly so Bundler can resolve deps
+gem "faraday-retry", "~> 1.0"
+
+# If you need different versions, update the pins above and run `bundle install`.
