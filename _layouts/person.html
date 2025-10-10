@@ -68,8 +68,34 @@
   <main class="ecard">
     <header class="ecard__header">
       <div class="hero-bg" aria-hidden="true"></div>
+      {% comment %} derive slug and avatar candidates: prefer page.image (absolute or relative), otherwise try /fotos/<slug>.(jpg|png), then a default icon. JS will try fallbacks and generate an initials SVG as last resort. {% endcomment %}
+      {% assign person_slug = page.slug %}
+      {% if person_slug == nil or person_slug == '' %}
+        {% assign person_slug = page.path | split: '/' | last | replace: '.md','' %}
+      {% endif %}
+
+      {% comment %} resolve primary avatar URL without accidentally prefixing base twice when page.image is absolute {% endcomment %}
+      {% if page.image %}
+        {% assign avatar_raw = page.image %}
+        {% if avatar_raw contains '://' %}
+          {% assign avatar_url = avatar_raw %}
+        {% else %}
+          {% assign avatar_url = avatar_raw | relative_url %}
+        {% endif %}
+      {% else %}
+        {% assign avatar_url = '/fotos/' | append: person_slug | append: '.jpg' | relative_url %}
+      {% endif %}
+
+      {% assign fallback_jpg = '/fotos/' | append: person_slug | append: '.jpg' | relative_url %}
+      {% assign fallback_png = '/fotos/' | append: person_slug | append: '.png' | relative_url %}
+      {% assign fallback_icon = '/assets/icons/briefcase.svg' | relative_url %}
+
       <div class="avatar-wrap">
-  <img src="{{ site.url }}{{ page.image | default: '/fotos/Prueba.jpg' | relative_url }}" alt="Avatar" class="avatar" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'><rect width=\'100%\' height=\'100%\' fill=\'%23022aa6\'/><text x=\'50%\' y=\'50%\' font-size=\'28\' font-family=\'Arial\' fill=\'%23fff\' dominant-baseline=\'middle\' text-anchor=\'middle\'>AVATAR</text></svg>'"/>
+        <img src="{{ avatar_url }}" alt="Avatar" class="avatar"
+          data-avatar-url="{{ avatar_url }}"
+          data-fallbacks="{{ fallback_jpg }};{{ fallback_png }};{{ fallback_icon }}"
+          data-slug="{{ person_slug }}"
+          data-name="{{ page.name | escape }}" />
       </div>
 
       <h1 class="name">{{ page.name }}</h1>
@@ -303,6 +329,76 @@
   // Este script busca esas imágenes y las reemplaza por rutas públicas en /assets/icons/ o por el avatar por defecto.
   (function(){
     try{
+      // Improved fallback loader for avatars and icons when Liquid isn't processed.
+      function isUrlAbsolute(u){ return typeof u === 'string' && (u.indexOf('://') !== -1 || u.indexOf('//') === 0); }
+
+      // generate an SVG data URL with the initials from a name
+      function initialsSvgDataUrl(name, size){
+        size = size || 300;
+        var initials = '';
+        if(name){
+          var parts = name.trim().split(/\s+/);
+          initials = (parts[0] || '').charAt(0) + (parts.length>1? (parts[parts.length-1]||'').charAt(0) : '');
+          initials = initials.toUpperCase();
+        }
+        var bg = '#0628b5';
+        var fg = '#fff';
+        var fontSize = Math.round(size/5);
+        var svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'><rect width='100%' height='100%' fill='${bg}' /><text x='50%' y='50%' font-family='Montserrat,Arial,sans-serif' font-size='${fontSize}' fill='${fg}' dominant-baseline='middle' text-anchor='middle'>${initials}</text></svg>`;
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+      }
+
+      // attempt to load an image, resolving relative URLs if needed. Returns a Promise that resolves when loaded or rejects.
+      function loadImage(url){
+        return new Promise(function(resolve,reject){
+          if(!url) return reject(new Error('empty url'));
+          var img = new Image();
+          img.onload = function(){ resolve(url); };
+          img.onerror = function(){ reject(new Error('failed to load ' + url)); };
+          img.src = url;
+        });
+      }
+
+      // For avatars: try the current src, then fallbacks listed in data-fallbacks, finally generate initials SVG
+      function resolveAvatar(imgEl){
+        if(!imgEl) return Promise.resolve(null);
+        var src = imgEl.getAttribute('src') || imgEl.src || '';
+        var fallbacks = (imgEl.getAttribute('data-fallbacks')||'').split(';').filter(Boolean);
+        var name = imgEl.getAttribute('data-name') || '';
+        var candidates = [];
+        if(src) candidates.push(src);
+        candidates = candidates.concat(fallbacks);
+
+        // try each candidate in sequence
+        var p = Promise.reject();
+        candidates.forEach(function(c){
+          p = p.catch(function(){
+            var url = c;
+            // if it's a site-relative path (starts with /) and the page was served from file://, leave it; otherwise prefix with site origin if available
+            return loadImage(url);
+          });
+        });
+
+        // final fallback: initials SVG
+        p = p.catch(function(){ return initialsSvgDataUrl(name, 300); });
+
+        return p.then(function(finalUrl){
+          // apply result to the element
+          try{ imgEl.src = finalUrl; }catch(e){}
+          return finalUrl;
+        }).catch(function(){
+          var svg = initialsSvgDataUrl(name,300);
+          imgEl.src = svg;
+          return svg;
+        });
+      }
+
+      // run resolution for the avatar image on the page
+      document.querySelectorAll('img.avatar').forEach(function(img){
+        try{ resolveAvatar(img); }catch(e){}
+      });
+
+      // keep a light fallback for other icons that might include unprocessed Liquid markers
       function fixSrc(img){
         if(!img) return;
         var raw = img.getAttribute('src') || img.src || '';
@@ -322,6 +418,7 @@
           }else if(alt.indexOf('whatsapp') !== -1){
             img.src = '/assets/icons/whatsapp.svg';
           }else if(img.classList && img.classList.contains('avatar')){
+            // avatar generic fallback
             img.src = '/fotos/Prueba.jpg';
           }else{
             // remove broken src to avoid further 404s
