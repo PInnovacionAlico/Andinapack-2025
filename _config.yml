@@ -15,4 +15,3 @@ collections:
 permalink: /:collection/:name/
 
 # Puedes añadir más opciones (theme, plugins) si vas a compilar con Actions
- 
