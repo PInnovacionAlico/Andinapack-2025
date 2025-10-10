@@ -1,0 +1,42 @@
+/* Mobile-first styles for e-card */
+:root{
+  --blue-900:#0628b5; /* main blue */
+  --blue-700:#0b32d1;
+  --muted:#8c8c8c;
+  --bg:#fff;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{font-family:Montserrat,system-ui,Arial,sans-serif;background:var(--bg);color:#111;margin:0;padding:20px;display:flex;align-items:flex-start;justify-content:center}
+.ecard{width:100%;max-width:420px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(2,6,23,0.08)}
+.ecard__header{padding:28px 20px 12px 20px;text-align:center;position:relative}
+.hero-bg{height:80px;background:linear-gradient(180deg,var(--blue-900),#2a45d9);border-bottom-left-radius:60% 40px;border-bottom-right-radius:60% 40px;position:absolute;left:0;right:0;top:0}
+.avatar-wrap{position:relative;margin:0 auto;width:140px;height:140px;border-radius:50%;transform:translateY(28px);overflow:hidden;background:#fff;padding:6px;box-shadow:0 4px 12px rgba(2,6,23,0.08)}
+.avatar{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.name{margin:44px 0 6px 0;font-family:Merriweather,serif;font-size:24px;color:#111}
+.role{margin:0;color:var(--muted);font-size:14px}
+.ctas{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+.btn{display:inline-block;padding:12px 18px;border-radius:26px;text-decoration:none;font-weight:600;color:var(--bg);background:linear-gradient(180deg,var(--blue-700),var(--blue-900));border:3px solid rgba(3,23,120,0.06);box-shadow:inset 0 -4px 0 rgba(0,0,0,0.06);}
+.btn--primary{color:#fff}
+
+.info{padding:18px 18px 28px}
+.row{display:flex;align-items:center;gap:14px;padding:14px 0}
+.icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.content{flex:1}
+.label{font-size:13px;color:var(--muted);}
+.value{font-size:16px;color:#111;margin-top:4px}
+hr{border:none;border-top:2px solid rgba(0,0,0,0.06);margin:0}
+.socials{display:flex;gap:18px;padding:18px 0;justify-content:flex-start}
+.social{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+
+/* Larger screens tweaks */
+@media(min-width:560px){
+  body{padding:36px}
+  .ecard{max-width:460px}
+  .ctas{flex-direction:row;justify-content:center}
+  .btn{min-width:140px}
+}
+
+/* Small accessibility/active states */
+.btn:active{transform:translateY(1px)}
+.social:active{opacity:0.85}
