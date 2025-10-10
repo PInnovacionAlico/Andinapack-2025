@@ -116,6 +116,7 @@
   <script src="{{ '/js/script.js' | relative_url }}" data-jekyll-fallback="true"></script>
 
   <!-- Fallback para cuando no se está sirviendo el sitio con Jekyll (p.ej. abrir archivos localmente) -->
+  {% raw %}
   <script>
   (function(){
     try{
@@ -142,5 +143,6 @@
     }
   })();
   </script>
+  {% endraw %}
 </body>
 </html>
