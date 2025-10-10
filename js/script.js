@@ -32,7 +32,54 @@ document.addEventListener('DOMContentLoaded',function(){
     return el ? el.textContent.trim() : '';
   }
 
-  downloadLink.addEventListener('click', function (e){
+  // Convert an <img> element (or its src) into base64 + mime info
+  async function imageElementToBase64(img){
+    if(!img) return null;
+    const src = img.getAttribute('src') || img.src;
+    if(!src) return null;
+
+    // data: URIs
+    if(src.startsWith('data:')){
+      // data:[<mediatype>][;base64],<data>
+      const comma = src.indexOf(',');
+      const meta = src.substring(5, comma);
+      const data = src.substring(comma + 1);
+      const isBase64 = meta.includes(';base64');
+      const mime = meta.split(';')[0] || 'image/png';
+      if(isBase64) return { mime, base64: data };
+      // not base64 — text data, encode to base64
+      try{
+        const encoded = btoa(unescape(encodeURIComponent(decodeURIComponent(data))));
+        return { mime, base64: encoded };
+      }catch(e){
+        // fallback: attempt simple btoa
+        try{ return { mime, base64: btoa(data) }; }catch(e2){ return null; }
+      }
+    }
+
+    // Otherwise fetch the image and convert to base64
+    try{
+      const resp = await fetch(src);
+      if(!resp.ok) return null;
+      const blob = await resp.blob();
+      const mime = blob.type || 'image/jpeg';
+      return await new Promise((resolve, reject)=>{
+        const reader = new FileReader();
+        reader.onloadend = ()=>{
+          const result = reader.result; // data:<mime>;base64,<data>
+          const comma = result.indexOf(',');
+          const base64 = result.substring(comma + 1);
+          resolve({ mime, base64 });
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }catch(err){
+      return null;
+    }
+  }
+
+  downloadLink.addEventListener('click', async function (e){
     e.preventDefault();
 
     // Collect data from page (fall back to known values)
@@ -56,7 +103,6 @@ document.addEventListener('DOMContentLoaded',function(){
     lines.push('BEGIN:VCARD');
     lines.push('VERSION:3.0');
     // Name: N:Last;First;Additional;Prefix;Suffix and FN for formatted name
-    // We only have a full name, put it into FN and attempt to split
     const names = fullName.split(' ');
     const first = names.shift() || '';
     const last = names.join(' ') || '';
@@ -64,7 +110,6 @@ document.addEventListener('DOMContentLoaded',function(){
     lines.push(`FN:${fullName}`);
     if(title) lines.push(`TITLE:${title}`);
     const companyFromRow = (function(){
-      // try to find company label (Cargo) row value
       const rows = document.querySelectorAll('.row');
       for(const r of rows){
         const label = r.querySelector('.label');
@@ -80,6 +125,26 @@ document.addEventListener('DOMContentLoaded',function(){
     if(email) lines.push(`EMAIL;TYPE=INTERNET:${email}`);
     if(city) lines.push(`ADR;TYPE=WORK:;;;${city};;;;`);
     if(website) lines.push(`URL:${website}`);
+
+    // Try to include avatar photo as base64 in vCard
+    try{
+      const avatar = document.querySelector('.avatar');
+      const imgInfo = await imageElementToBase64(avatar);
+      if(imgInfo && imgInfo.base64){
+        // vCard expects TYPE name like JPEG or PNG; derive from mime
+        let typePart = 'JPEG';
+        try{
+          const sub = (imgInfo.mime || '').split('/')[1] || '';
+          typePart = sub.split('+')[0].toUpperCase() || 'JPEG';
+        }catch(e){/* ignore */}
+        // Add PHOTO field. Using ENCODING=b for vCard 3.0
+        lines.push(`PHOTO;ENCODING=b;TYPE=${typePart}:${imgInfo.base64}`);
+      }
+    }catch(err){
+      // if photo fails, continue without it
+      console.warn('No se pudo incluir la foto en la vCard:', err);
+    }
+
     lines.push('END:VCARD');
 
     const vcardString = lines.join('\r\n');
