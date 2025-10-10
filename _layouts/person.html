@@ -85,7 +85,7 @@
     <section class="info">
       <div class="row">
         <div class="icon"> 
-          <img class="icon-img" src="{{ '/_layouts/icons/phone.svg' | relative_url }}" alt="Teléfono" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ '/assets/icons/phone.svg' | relative_url }}" alt="Teléfono" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Teléfono</div>
@@ -97,7 +97,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ '/_layouts/icons/email.svg' | relative_url }}" alt="Email" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ '/assets/icons/email.svg' | relative_url }}" alt="Email" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Email</div>
@@ -109,7 +109,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ '/_layouts/icons/briefcase.svg' | relative_url }}" alt="Cargo" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ '/assets/icons/briefcase.svg' | relative_url }}" alt="Cargo" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Cargo</div>
@@ -133,7 +133,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ '/_layouts/icons/globe.svg' | relative_url }}" alt="Sitio web" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ '/assets/icons/globe.svg' | relative_url }}" alt="Sitio web" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Sitio web</div>
@@ -146,13 +146,13 @@
       <div class="socials">
         {% if page.linkedin %}
         <a class="social" aria-label="linkedin" href="{{ page.linkedin }}" target="_blank" rel="noopener noreferrer" title="LinkedIn — ejemplo">
-          <img class="social-img" src="{{ '/_layouts/icons/linkedin.svg' | relative_url }}" alt="LinkedIn" onerror="this.style.display='none'" />
+          <img class="social-img" src="{{ '/assets/icons/linkedin.svg' | relative_url }}" alt="LinkedIn" onerror="this.style.display='none'" />
         </a>
         {% endif %}
 
         {% if page.whatsapp %}
         <a class="social" aria-label="whatsapp" href="{{ page.whatsapp }}" target="_blank" rel="noopener noreferrer" title="WhatsApp — ejemplo">
-          <img class="social-img" src="{{ '/_layouts/icons/whatsapp.svg' | relative_url }}" alt="WhatsApp" onerror="this.style.display='none'" />
+          <img class="social-img" src="{{ '/assets/icons/whatsapp.svg' | relative_url }}" alt="WhatsApp" onerror="this.style.display='none'" />
         </a>
         {% endif %}
       </div>
@@ -295,6 +295,43 @@
       });
     }
   });
+  </script>
+  <script>
+  // Fallback adicional: si el archivo se abre sin procesar por Jekyll (p.ej. directamente),
+  // muchos atributos src pueden contener Liquid sin procesar (contienen '{').
+  // Este script busca esas imágenes y las reemplaza por rutas públicas en /assets/icons/ o por el avatar por defecto.
+  (function(){
+    try{
+      function fixSrc(img){
+        if(!img) return;
+        var raw = img.getAttribute('src') || img.src || '';
+        if(!raw) return;
+        if(raw.indexOf('{') !== -1 || raw.indexOf('%7B') !== -1){
+          var alt = (img.getAttribute('alt')||'').toLowerCase();
+          if(alt.indexOf('tel') !== -1 || alt.indexOf('teléfono') !== -1 || alt.indexOf('phone') !== -1){
+            img.src = '/assets/icons/phone.svg';
+          }else if(alt.indexOf('email') !== -1){
+            img.src = '/assets/icons/email.svg';
+          }else if(alt.indexOf('cargo') !== -1 || alt.indexOf('briefcase') !== -1){
+            img.src = '/assets/icons/briefcase.svg';
+          }else if(alt.indexOf('sitio') !== -1 || alt.indexOf('web') !== -1 || alt.indexOf('globe') !== -1){
+            img.src = '/assets/icons/globe.svg';
+          }else if(alt.indexOf('linkedin') !== -1){
+            img.src = '/assets/icons/linkedin.svg';
+          }else if(alt.indexOf('whatsapp') !== -1){
+            img.src = '/assets/icons/whatsapp.svg';
+          }else if(img.classList && img.classList.contains('avatar')){
+            img.src = '/fotos/Prueba.jpg';
+          }else{
+            // remove broken src to avoid further 404s
+            img.removeAttribute('src');
+          }
+        }
+      }
+      var imgs = document.querySelectorAll('img');
+      imgs.forEach(fixSrc);
+    }catch(e){ console.warn('Fallback icon fixer failed', e); }
+  })();
   </script>
 </body>
 </html>
