@@ -1,117 +1,23 @@
+---
+title: Directorio
+---
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>E-card — Valentina Gaviria</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-  <main class="ecard">
-    <header class="ecard__header">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="avatar-wrap">
-        <!-- Usa Ecard.jpg si quieres la imagen real adjunta -->
-        <img src="fotos/Prueba.jpg" alt="Avatar" class="avatar" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'><rect width=\'100%\' height=\'100%\' fill=\'%23022aa6\'/><text x=\'50%\' y=\'50%\' font-size=\'28\' font-family=\'Arial\' fill=\'%23fff\' dominant-baseline=\'middle\' text-anchor=\'middle\'>AVATAR</text></svg>'"/>
-      </div>
-
-      <h1 class="name">Valentina Gaviria</h1>
-      <p class="role">Analista de innovación - Alico SAS BIC</p>
-
-      <div class="ctas">
-        <a class="btn btn--primary" id="callBtn">Teléfono</a>
-        <a class="btn btn--primary" id="emailBtn">Email</a>
-        <a class="btn btn--primary" id="siteBtn">Sitio Web</a>
-      </div>
-    </header>
-
-    <section class="info">
-      <div class="row">
-        <div class="icon"> 
-          <img class="icon-img" src="icons/phone.svg" alt="Teléfono" onerror="this.style.display='none'" />
-        </div>
-        <div class="content">
-          <div class="label">Teléfono</div>
-          <div class="value">+57 3003003030</div>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="row">
-        <div class="icon">
-          <img class="icon-img" src="icons/email.svg" alt="Email" onerror="this.style.display='none'" />
-        </div>
-        <div class="content">
-          <div class="label">Email</div>
-          <div class="value">correo@alico-sa.com</div>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="row">
-        <div class="icon">
-          <img class="icon-img" src="icons/briefcase.svg" alt="Cargo" onerror="this.style.display='none'" />
-        </div>
-        <div class="content">
-          <div class="label">Cargo</div>
-          <div class="value">Alico S.A.S. BIC</div>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="row">
-        <div class="icon">
-          <!-- keep existing location SVG (city icon) -->
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" stroke="#0628b5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="#0628b5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="content">
-          <div class="label">Ciudad</div>
-          <div class="value">Ciudad</div>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="row">
-        <div class="icon">
-          <img class="icon-img" src="icons/globe.svg" alt="Sitio web" onerror="this.style.display='none'" />
-        </div>
-        <div class="content">
-          <div class="label">Sitio web</div>
-          <div class="value">alicoempaques.com</div>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="socials">
-        <a class="social" aria-label="linkedin" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" title="LinkedIn — ejemplo">
-          <img class="social-img" src="icons/linkedin.svg" alt="LinkedIn" onerror="this.style.display='none'" />
-        </a>
-
-        <a class="social" aria-label="whatsapp" href="https://wa.me/573003003030?text=Hola%20Valentina" target="_blank" rel="noopener noreferrer" title="WhatsApp — ejemplo">
-          <img class="social-img" src="icons/whatsapp.svg" alt="WhatsApp" onerror="this.style.display='none'" />
-        </a>
-      </div>
-
-    </section>
-
-    <footer class="download-footer" role="contentinfo">
-      <a id="downloadVcard" class="download-footer__link" href="#" title="Descargar VCard">
-        <span class="download-footer__icon" aria-hidden="true">
-          <!-- user icon -->
-          <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"/></svg>
-        </span>
-        <span class="download-footer__text">Descargar VCard</span>
-      </a>
-    </footer>
-
-  </main>
-
-  <script src="js/script.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Directorio — {{ site.title }}</title>
+  </head>
+  <body>
+    <main>
+      <h1>Directorio</h1>
+      <ul>
+        {% for p in site.people %}
+          <li>
+            <a href="{{ p.url | relative_url }}">{{ p.name }}</a>{% if p.role %} — {{ p.role }}{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </main>
+  </body>
 </html>
