@@ -44,3 +44,14 @@ hr{border:none;border-top:2px solid rgba(0,0,0,0.06);margin:0}
 /* Small accessibility/active states */
 .btn:active{transform:translateY(1px)}
 .social:active{opacity:0.85}
+
+/* Footer download vcard */
+.download-footer{
+  position:sticky;bottom:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--blue-700),var(--blue-900));padding:10px;border-top-left-radius:8px;border-top-right-radius:8px}
+.download-footer__link{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;padding:10px 16px;border-radius:26px}
+.download-footer__icon{display:inline-flex;align-items:center;justify-content:center}
+.download-footer__text{font-size:15px}
+
+@media(min-width:560px){
+  .download-footer{padding:14px}
+}
