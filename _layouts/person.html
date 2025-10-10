@@ -431,5 +431,65 @@
     }catch(e){ console.warn('Fallback icon fixer failed', e); }
   })();
   </script>
+  <script>
+  // Track page view: send fecha, hora, pagina to the Apps Script endpoint.
+  (function(){
+    try{
+      var AS_URL = 'https://script.google.com/macros/s/AKfycbxs0nodJsuW5e92kXkuspaP3I7MlTvcg15WXTGjfsSqRPJJlva86fJ-aQg4QXw0xtiZeQ/exec';
+
+      // read minimal page info from the person JSON embedded earlier
+      var personEl = document.getElementById('person-data');
+      var PERSON = {};
+      if(personEl && personEl.textContent){
+        try{ PERSON = JSON.parse(personEl.textContent); }catch(e){ PERSON = {}; }
+      }
+
+      var slug = PERSON.slug || PERSON.path || PERSON.name || document.location.pathname || '';
+      var pageName = PERSON.name || slug || document.location.pathname || '';
+
+      function isoNowParts(){
+        var d = new Date();
+        var fecha = d.toLocaleDateString('es-CO');
+        var hora = d.toLocaleTimeString('es-CO');
+        return { fecha: fecha, hora: hora };
+      }
+
+      function sendVisit(){
+        var parts = isoNowParts();
+        var payload = { fecha: parts.fecha, hora: parts.hora, pagina: pageName };
+
+        var body = JSON.stringify(payload);
+
+        // Try normal fetch first (with CORS). If the Apps Script is deployed to allow anonymous requests, this will work.
+        try{
+          fetch(AS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body,
+            keepalive: true
+          }).catch(function(err){
+            // fallback to sendBeacon
+            try{
+              if(navigator.sendBeacon){
+                var blob = new Blob([body], { type: 'application/json' });
+                navigator.sendBeacon(AS_URL, blob);
+              }
+            }catch(e){ /* swallow */ }
+          });
+        }catch(e){
+          // older browsers: try sendBeacon
+          try{ if(navigator.sendBeacon){ var blob = new Blob([body], { type: 'application/json' }); navigator.sendBeacon(AS_URL, blob); } }catch(e2){}
+        }
+      }
+
+      // send after a short delay so non-blocking and to increase chance of successful navigation events
+      if(document.readyState === 'complete' || document.readyState === 'interactive'){
+        setTimeout(sendVisit, 250);
+      }else{
+        window.addEventListener('DOMContentLoaded', function(){ setTimeout(sendVisit, 250); });
+      }
+    }catch(e){ console.warn('visit-tracker failed', e); }
+  })();
+  </script>
 </body>
 </html>
