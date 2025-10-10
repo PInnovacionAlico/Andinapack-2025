@@ -69,7 +69,7 @@
     <header class="ecard__header">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="avatar-wrap">
-        <img src="{{ page.image | default: '/fotos/Prueba.jpg' | relative_url }}" alt="Avatar" class="avatar" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'><rect width=\'100%\' height=\'100%\' fill=\'%23022aa6\'/><text x=\'50%\' y=\'50%\' font-size=\'28\' font-family=\'Arial\' fill=\'%23fff\' dominant-baseline=\'middle\' text-anchor=\'middle\'>AVATAR</text></svg>'"/>
+  <img src="{{ site.url }}{{ page.image | default: '/fotos/Prueba.jpg' | relative_url }}" alt="Avatar" class="avatar" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'><rect width=\'100%\' height=\'100%\' fill=\'%23022aa6\'/><text x=\'50%\' y=\'50%\' font-size=\'28\' font-family=\'Arial\' fill=\'%23fff\' dominant-baseline=\'middle\' text-anchor=\'middle\'>AVATAR</text></svg>'"/>
       </div>
 
       <h1 class="name">{{ page.name }}</h1>
@@ -85,7 +85,7 @@
     <section class="info">
       <div class="row">
         <div class="icon"> 
-          <img class="icon-img" src="{{ '/assets/icons/phone.svg' | relative_url }}" alt="Teléfono" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/phone.svg" alt="Teléfono" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Teléfono</div>
@@ -97,7 +97,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ '/assets/icons/email.svg' | relative_url }}" alt="Email" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/email.svg" alt="Email" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Email</div>
@@ -109,7 +109,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ '/assets/icons/briefcase.svg' | relative_url }}" alt="Cargo" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/briefcase.svg" alt="Cargo" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Cargo</div>
@@ -133,7 +133,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ '/assets/icons/globe.svg' | relative_url }}" alt="Sitio web" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/globe.svg" alt="Sitio web" onerror="this.style.display='none'" />
         </div>
         <div class="content">
           <div class="label">Sitio web</div>
@@ -146,13 +146,13 @@
       <div class="socials">
         {% if page.linkedin %}
         <a class="social" aria-label="linkedin" href="{{ page.linkedin }}" target="_blank" rel="noopener noreferrer" title="LinkedIn — ejemplo">
-          <img class="social-img" src="{{ '/assets/icons/linkedin.svg' | relative_url }}" alt="LinkedIn" onerror="this.style.display='none'" />
+          <img class="social-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/linkedin.svg" alt="LinkedIn" onerror="this.style.display='none'" />
         </a>
         {% endif %}
 
         {% if page.whatsapp %}
         <a class="social" aria-label="whatsapp" href="{{ page.whatsapp }}" target="_blank" rel="noopener noreferrer" title="WhatsApp — ejemplo">
-          <img class="social-img" src="{{ '/assets/icons/whatsapp.svg' | relative_url }}" alt="WhatsApp" onerror="this.style.display='none'" />
+          <img class="social-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/whatsapp.svg" alt="WhatsApp" onerror="this.style.display='none'" />
         </a>
         {% endif %}
       </div>
