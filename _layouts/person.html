@@ -137,7 +137,7 @@
         </div>
         <div class="content">
           <div class="label">Sitio web</div>
-          <div class="value">{{ page.website }}</div>
+          <div class="value">https://alicoempaques.com</div>
         </div>
       </div>
 
@@ -187,7 +187,8 @@
 
     const phone = PERSON.phone || '';
     const email = PERSON.email || '';
-    const website = PERSON.website || '';
+  // Force website to the corporate URL regardless of front matter
+  const website = 'https://alicoempaques.com';
 
     const callBtn = document.getElementById('callBtn');
     const emailBtn = document.getElementById('emailBtn');
@@ -250,7 +251,7 @@
         const title = PERSON.role || '';
         const phoneVal = PERSON.phone || '';
         const emailVal = PERSON.email || '';
-        const websiteVal = PERSON.website || '';
+  const websiteVal = 'https://alicoempaques.com';
         const cityVal = PERSON.city || '';
         const companyVal = PERSON.company || '';
 
