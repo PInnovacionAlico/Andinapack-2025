@@ -1,0 +1,14 @@
+# Configuración mínima para GitHub Pages + Jekyll
+title: NFC Andina
+baseurl: "" # usa esto si publicas en user.github.io/repositorio -> otherwise keep empty
+url: "https://your-username.github.io" # reemplaza con tu URL si quieres pruebas locales/producción
+
+authors: []
+
+collections:
+  people:
+    output: true
+
+permalink: /:collection/:name/
+
+# Puedes añadir más opciones (theme, plugins) si vas a compilar con Actions
