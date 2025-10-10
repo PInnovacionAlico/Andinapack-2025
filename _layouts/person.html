@@ -5,7 +5,64 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{{ page.name }} — {{ site.title }}</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ '/css/styles.css' | relative_url }}" data-jekyll-fallback="true">
+  <style>
+  /* Inline styles from css/styles.css to ensure they load on GitHub Pages and file:// previews */
+  :root{
+    --blue-900:#0628b5; /* main blue */
+    --blue-700:#0b32d1;
+    --muted:#8c8c8c;
+    --bg:#fff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:Montserrat,system-ui,Arial,sans-serif;background:var(--bg);color:#111;margin:0;padding:20px;display:flex;align-items:flex-start;justify-content:center}
+  .ecard{width:100%;max-width:420px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(2,6,23,0.08);display:flex;flex-direction:column}
+  .ecard__header{padding:28px 20px 12px 20px;text-align:center;position:relative}
+  .hero-bg{height:80px;background:linear-gradient(180deg,var(--blue-900),#2a45d9);border-bottom-left-radius:60% 40px;border-bottom-right-radius:60% 40px;position:absolute;left:0;right:0;top:0}
+  .avatar-wrap{position:relative;margin:0 auto;width:140px;height:140px;border-radius:50%;transform:translateY(28px);overflow:hidden;background:#fff;padding:6px;box-shadow:0 4px 12px rgba(2,6,23,0.08)}
+  .avatar{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+  .name{margin:44px 0 6px 0;font-family:Merriweather,serif;font-size:24px;color:#111}
+  .role{margin:0;color:var(--muted);font-size:14px}
+  .ctas{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+  .btn{display:inline-block;padding:12px 18px;border-radius:26px;text-decoration:none;font-weight:600;color:var(--bg);background:linear-gradient(180deg,var(--blue-700),var(--blue-900));border:3px solid rgba(3,23,120,0.06);box-shadow:inset 0 -4px 0 rgba(0,0,0,0.06);}
+  .btn--primary{color:#fff}
+
+  .info{padding:18px 18px 28px;flex:1}
+  .row{display:flex;align-items:center;gap:14px;padding:14px 0}
+  .icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+  .content{flex:1}
+  .icon-img{width:28px;height:28px;display:block}
+  .social-img{width:48px;height:48px;display:block}
+  .hidden-if-missing{display:none}
+  .label{font-size:13px;color:var(--muted);}
+  .value{font-size:16px;color:#111;margin-top:4px}
+  hr{border:none;border-top:2px solid rgba(0,0,0,0.06);margin:0}
+  .socials{display:flex;gap:24px;padding:18px 0;justify-content:center;align-items:center}
+  .social{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:8px;padding:6px}
+  .social-img{width:56px;height:56px;display:block}
+
+  /* Larger screens tweaks */
+  @media(min-width:560px){
+    body{padding:36px}
+    .ecard{max-width:460px}
+    .ctas{flex-direction:row;justify-content:center}
+    .btn{min-width:140px}
+  }
+
+  /* Small accessibility/active states */
+  .btn:active{transform:translateY(1px)}
+  .social:active{opacity:0.85}
+
+  /* Footer download vcard */
+  .download-footer{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--blue-700),var(--blue-900));padding:14px;margin-top:8px;width:100%;border-bottom-left-radius:14px;border-bottom-right-radius:14px}
+  .download-footer__link{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px}
+  .download-footer__icon{display:inline-flex;align-items:center;justify-content:center}
+  .download-footer__text{font-size:15px}
+
+  @media(min-width:560px){
+    .download-footer{padding:14px}
+  }
+  </style>
 </head>
 <body>
   <main class="ecard">
@@ -113,36 +170,131 @@
 
   </main>
 
-  <script src="{{ '/js/script.js' | relative_url }}" data-jekyll-fallback="true"></script>
+  <!-- Datos de la persona en JSON para ser leídos por el script (no es JS ejecutable, evita que Liquid rompa el parser) -->
+  <script id="person-data" type="application/json">{{ page | jsonify | replace: "</", "<\\/" }}</script>
 
-  <!-- Fallback para cuando no se está sirviendo el sitio con Jekyll (p.ej. abrir archivos localmente) -->
-  {% raw %}
   <script>
-  (function(){
+  // Usa los datos de la página leyendo el script[type=application/json]
+  document.addEventListener('DOMContentLoaded', function(){
+    let PERSON = {};
     try{
-      // arregla hojas de estilo que aún contienen Liquid ("{{"), útil para vista por file://
-      var links = document.querySelectorAll('link[data-jekyll-fallback]');
-      links.forEach(function(l){
-        var href = l.getAttribute('href') || '';
-        if(href.indexOf('{') !== -1){
-          // ruta relativa válida desde la raíz del repo cuando se abre localmente
-          l.href = 'css/styles.css';
-        }
-      });
-
-      var scripts = document.querySelectorAll('script[data-jekyll-fallback]');
-      scripts.forEach(function(s){
-        var src = s.getAttribute('src') || '';
-        if(src.indexOf('{') !== -1){
-          s.src = 'js/script.js';
-        }
-      });
+      const el = document.getElementById('person-data');
+      if(el && el.textContent) PERSON = JSON.parse(el.textContent);
     }catch(e){
-      // no hacemos nada si falla
-      console.warn('Jekyll fallback script error', e);
+      console.warn('No se pudo parsear person-data JSON', e);
+      PERSON = {};
     }
-  })();
+
+    const phone = PERSON.phone || '';
+    const email = PERSON.email || '';
+    const website = PERSON.website || '';
+
+    const callBtn = document.getElementById('callBtn');
+    const emailBtn = document.getElementById('emailBtn');
+    const siteBtn = document.getElementById('siteBtn');
+
+    if(callBtn){
+      callBtn.addEventListener('click', ()=>{ if(phone) window.location.href = `tel:${phone}`; });
+    }
+    if(emailBtn){
+      emailBtn.addEventListener('click', ()=>{ if(email) window.location.href = `mailto:${email}`; });
+    }
+    if(siteBtn){
+      siteBtn.addEventListener('click', ()=>{ if(website) window.open(website,'_blank'); });
+    }
+
+    // Convierte un elemento <img> (o su src) a base64 + mime
+    async function imageElementToBase64(img){
+      if(!img) return null;
+      const src = img.getAttribute('src') || img.src;
+      if(!src) return null;
+
+      if(src.startsWith('data:')){
+        const comma = src.indexOf(',');
+        const meta = src.substring(5, comma);
+        const data = src.substring(comma + 1);
+        const isBase64 = meta.includes(';base64');
+        const mime = meta.split(';')[0] || 'image/png';
+        if(isBase64) return { mime, base64: data };
+        try{ const encoded = btoa(unescape(encodeURIComponent(decodeURIComponent(data)))); return { mime, base64: encoded }; }catch(e){ try{ return { mime, base64: btoa(data) }; }catch(e2){ return null; } }
+      }
+
+      try{
+        const resp = await fetch(src);
+        if(!resp.ok) return null;
+        const blob = await resp.blob();
+        const mime = blob.type || 'image/jpeg';
+        return await new Promise((resolve, reject)=>{
+          const reader = new FileReader();
+          reader.onloadend = ()=>{
+            const result = reader.result; // data:<mime>;base64,<data>
+            const comma = result.indexOf(',');
+            const base64 = result.substring(comma + 1);
+            resolve({ mime, base64 });
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      }catch(err){
+        return null;
+      }
+    }
+
+    // vCard download
+    const downloadLink = document.getElementById('downloadVcard');
+    if(downloadLink){
+      downloadLink.addEventListener('click', async function(e){
+        e.preventDefault();
+
+        const fullName = PERSON.name || 'Sin nombre';
+        const title = PERSON.role || '';
+        const phoneVal = PERSON.phone || '';
+        const emailVal = PERSON.email || '';
+        const websiteVal = PERSON.website || '';
+        const cityVal = PERSON.city || '';
+        const companyVal = PERSON.company || '';
+
+        const lines = [];
+        lines.push('BEGIN:VCARD');
+        lines.push('VERSION:3.0');
+        const names = (fullName || '').split(' ');
+        const first = names.shift() || '';
+        const last = names.join(' ') || '';
+        lines.push(`N:${last};${first};;;`);
+        lines.push(`FN:${fullName}`);
+        if(title) lines.push(`TITLE:${title}`);
+        if(companyVal) lines.push(`ORG:${companyVal}`);
+        if(phoneVal) lines.push(`TEL;TYPE=CELL:${phoneVal}`);
+        if(emailVal) lines.push(`EMAIL;TYPE=INTERNET:${emailVal}`);
+        if(cityVal) lines.push(`ADR;TYPE=WORK:;;;${cityVal};;;;`);
+        if(websiteVal) lines.push(`URL:${websiteVal}`);
+
+        try{
+          const avatar = document.querySelector('.avatar');
+          const imgInfo = await imageElementToBase64(avatar);
+          if(imgInfo && imgInfo.base64){
+            let typePart = 'JPEG';
+            try{ const sub = (imgInfo.mime || '').split('/')[1] || ''; typePart = sub.split('+')[0].toUpperCase() || 'JPEG'; }catch(e){}
+            lines.push(`PHOTO;ENCODING=b;TYPE=${typePart}:${imgInfo.base64}`);
+          }
+        }catch(err){ console.warn('No se pudo incluir foto en vCard', err); }
+
+        lines.push('END:VCARD');
+
+        const vcardString = lines.join('\r\n');
+        const blob = new Blob([vcardString], {type: 'text/vcard;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const safeName = (fullName || 'contact').replace(/[^a-z0-9\-_\. ]/ig,'_');
+        a.download = `${safeName}.vcf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(()=> URL.revokeObjectURL(url), 1500);
+      });
+    }
+  });
   </script>
-  {% endraw %}
 </body>
 </html>
