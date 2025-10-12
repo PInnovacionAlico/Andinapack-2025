@@ -70,7 +70,7 @@
     <header class="ecard__header">
       <div class="hero-bg" aria-hidden="true"></div>
       <div style="width:100%;display:flex;justify-content:center;margin-bottom:10px;">
-  <img src="{{ site.url }}{{ site.baseurl }}/assets/icons/alico.png" alt="Logo Alico" style="height:48px;max-width:160px;object-fit:contain;" />
+  <img src="{{ site.url }}{{ site.baseurl }}/assets/icons/alico.png" alt="Logo Alico" style="height:48px;max-width:160px;object-fit:contain;box-shadow:0 2px 8px rgba(0,0,0,0.04);background:#fff;border-radius:8px;padding:2px;z-index:2;position:relative;" />
       </div>
       {% comment %} derive slug and avatar candidates: prefer page.image (absolute or relative), otherwise try /fotos/<slug>.(jpg|png), then a default icon. JS will try fallbacks and generate an initials SVG as last resort. {% endcomment %}
       {% assign person_slug = page.slug %}
