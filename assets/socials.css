@@ -1,0 +1,18 @@
+/* Centrado de los botones sociales en la ficha de persona */
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-img {
+  width: 32px;
+  height: 32px;
+}
