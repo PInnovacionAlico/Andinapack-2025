@@ -6,7 +6,6 @@ phone: "+573152474178"
 email: "jbautista@alico-sa.com"
 city: "Barranquilla"
 company: "Alico S.A.S."
-whatsapp: "https://wa.me/573003003030"
 ---
 
 Ficha de contacto para Juan Carlos Bautista.
