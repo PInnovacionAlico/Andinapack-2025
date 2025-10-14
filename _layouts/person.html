@@ -285,17 +285,6 @@
         if(emailVal) lines.push(`EMAIL;TYPE=INTERNET:${emailVal}`);
         if(cityVal) lines.push(`ADR;TYPE=WORK:;;;${cityVal};;;;`);
         if(websiteVal) lines.push(`URL:${websiteVal}`);
-
-        try{
-          const avatar = document.querySelector('.avatar');
-          const imgInfo = await imageElementToBase64(avatar);
-          if(imgInfo && imgInfo.base64){
-            let typePart = 'JPEG';
-            try{ const sub = (imgInfo.mime || '').split('/')[1] || ''; typePart = sub.split('+')[0].toUpperCase() || 'JPEG'; }catch(e){}
-            lines.push(`PHOTO;ENCODING=b;TYPE=${typePart}:${imgInfo.base64}`);
-          }
-        }catch(err){ console.warn('No se pudo incluir foto en vCard', err); }
-
         lines.push('END:VCARD');
 
         const vcardString = lines.join('\r\n');
