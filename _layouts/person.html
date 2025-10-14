@@ -90,12 +90,10 @@
       {% endif %}
 
       {% assign fallback_jpeg = '/fotos/' | append: person_slug | append: '.jpeg' | relative_url %}
-      {% assign fallback_icon = '/assets/icons/briefcase.svg' | relative_url %}
-
       <div class="avatar-wrap">
         <img src="{{ avatar_url }}" alt="Avatar" class="avatar"
           data-avatar-url="{{ avatar_url }}"
-          data-fallbacks="{{ fallback_jpeg }};{{ fallback_icon }}"
+          data-fallbacks=""
           data-slug="{{ person_slug }}"
           data-name="{{ page.name | escape }}" />
       </div>
@@ -344,31 +342,18 @@
       function resolveAvatar(imgEl){
         if(!imgEl) return Promise.resolve(null);
         var src = imgEl.getAttribute('src') || imgEl.src || '';
-        var fallbacks = (imgEl.getAttribute('data-fallbacks')||'').split(';').filter(Boolean);
         var name = imgEl.getAttribute('data-name') || '';
-        var candidates = [];
-        if(src) candidates.push(src);
-        candidates = candidates.concat(fallbacks);
-
-        // Solo .jpeg y el icono
-        var promises = candidates.map(function(c){
-          return loadImage(c, 2000); // 2 segundos de timeout por imagen
-        });
-
-        var racePromise = Promise.race(promises);
-
-        var finalPromise = racePromise.catch(function(){
-          return initialsSvgDataUrl(name, 300);
-        });
-
-        return finalPromise.then(function(finalUrl){
-          try{ imgEl.src = finalUrl; }catch(e){}
-          return finalUrl;
-        }).catch(function(){
-          var svg = initialsSvgDataUrl(name,300);
-          imgEl.src = svg;
-          return svg;
-        });
+        // Solo intenta cargar la imagen principal, si falla usa las iniciales
+        return loadImage(src, 2000)
+          .then(function(finalUrl){
+            imgEl.src = finalUrl;
+            return finalUrl;
+          })
+          .catch(function(){
+            var svg = initialsSvgDataUrl(name, 300);
+            imgEl.src = svg;
+            return svg;
+          });
       }
 
       // run resolution for the avatar image on the page
