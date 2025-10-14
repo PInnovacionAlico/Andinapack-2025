@@ -4,11 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{{ page.name }} — {{ site.title }}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Preconnect a dominios externos críticos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com">
+  
+  <!-- Fuentes optimizadas con font-display swap -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"></noscript>
+  
   <style>
-  /* Inline styles from css/styles.css to ensure they load on GitHub Pages and file:// previews */
+  /* Critical CSS inline - same styles */
   :root{
-    --blue-900:#0628b5; /* main blue */
+    --blue-900:#0628b5;
     --blue-700:#0b32d1;
     --muted:#8c8c8c;
     --bg:#fff;
@@ -26,42 +35,31 @@
   .ctas{display:flex;flex-direction:column;gap:12px;margin-top:18px}
   .btn{display:inline-block;padding:12px 18px;border-radius:26px;text-decoration:none;font-weight:600;color:var(--bg);background:linear-gradient(180deg,var(--blue-700),var(--blue-900));border:3px solid rgba(3,23,120,0.06);box-shadow:inset 0 -4px 0 rgba(0,0,0,0.06);}
   .btn--primary{color:#fff}
-
   .info{padding:18px 18px 28px;flex:1}
   .row{display:flex;align-items:center;gap:14px;padding:14px 0}
   .icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
   .content{flex:1}
   .icon-img{width:28px;height:28px;display:block}
   .social-img{width:48px;height:48px;display:block}
-  .hidden-if-missing{display:none}
   .label{font-size:13px;color:var(--muted);}
   .value{font-size:16px;color:#111;margin-top:4px}
   hr{border:none;border-top:2px solid rgba(0,0,0,0.06);margin:0}
   .socials{display:flex;gap:24px;padding:18px 0;justify-content:center;align-items:center}
   .social{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:8px;padding:6px}
   .social-img{width:56px;height:56px;display:block}
-
-  /* Larger screens tweaks */
+  .download-footer{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--blue-700),var(--blue-900));padding:14px;margin-top:8px;width:100%;border-bottom-left-radius:14px;border-bottom-right-radius:14px}
+  .download-footer__link{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px}
+  .download-footer__icon{display:inline-flex;align-items:center;justify-content:center}
+  .download-footer__text{font-size:15px}
   @media(min-width:560px){
     body{padding:36px}
     .ecard{max-width:460px}
     .ctas{flex-direction:row;justify-content:center}
     .btn{min-width:140px}
-  }
-
-  /* Small accessibility/active states */
-  .btn:active{transform:translateY(1px)}
-  .social:active{opacity:0.85}
-
-  /* Footer download vcard */
-  .download-footer{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--blue-700),var(--blue-900));padding:14px;margin-top:8px;width:100%;border-bottom-left-radius:14px;border-bottom-right-radius:14px}
-  .download-footer__link{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px}
-  .download-footer__icon{display:inline-flex;align-items:center;justify-content:center}
-  .download-footer__text{font-size:15px}
-
-  @media(min-width:560px){
     .download-footer{padding:14px}
   }
+  .btn:active{transform:translateY(1px)}
+  .social:active{opacity:0.85}
   </style>
 </head>
 <body>
@@ -69,15 +67,14 @@
     <header class="ecard__header">
       <div class="hero-bg" aria-hidden="true"></div>
       <div style="width:100%;display:flex;justify-content:center;margin-bottom:10px;position:absolute;left:0;right:0;top:16px;z-index:10;pointer-events:none;">
-        <img src="{{ site.url }}{{ site.baseurl }}/assets/icons/alico.png" alt="Logo Alico" style="height:48px;max-width:160px;object-fit:contain;pointer-events:auto;" />
+        <img src="{{ site.url }}{{ site.baseurl }}/assets/icons/alico.png" alt="Logo Alico" width="160" height="48" loading="eager" style="height:48px;max-width:160px;object-fit:contain;pointer-events:auto;" />
       </div>
-      {% comment %} derive slug and avatar candidates: prefer page.image (absolute or relative), otherwise try /fotos/<slug>.(jpg|png), then a default icon. JS will try fallbacks and generate an initials SVG as last resort. {% endcomment %}
+      
       {% assign person_slug = page.slug %}
       {% if person_slug == nil or person_slug == '' %}
         {% assign person_slug = page.path | split: '/' | last | replace: '.md','' %}
       {% endif %}
 
-      {% comment %} resolve primary avatar URL without accidentally prefixing base twice when page.image is absolute {% endcomment %}
       {% if page.image %}
         {% assign avatar_raw = page.image %}
         {% if avatar_raw contains '://' %}
@@ -94,7 +91,7 @@
       {% assign fallback_icon = '/assets/icons/briefcase.svg' | relative_url %}
 
       <div class="avatar-wrap">
-        <img src="{{ avatar_url }}" alt="Avatar" class="avatar"
+        <img src="{{ avatar_url }}" alt="Avatar de {{ page.name }}" class="avatar" width="128" height="128" loading="eager"
           data-avatar-url="{{ avatar_url }}"
           data-fallbacks="{{ fallback_jpg }};{{ fallback_png }};{{ fallback_icon }}"
           data-slug="{{ person_slug }}"
@@ -105,16 +102,16 @@
       <p class="role">{{ page.role }}</p>
 
       <div class="ctas">
-        <a class="btn btn--primary" id="callBtn">Teléfono</a>
-        <a class="btn btn--primary" id="emailBtn">Email</a>
-        <a class="btn btn--primary" id="siteBtn">Sitio Web</a>
+        <a class="btn btn--primary" id="callBtn" href="tel:{{ page.phone }}">Teléfono</a>
+        <a class="btn btn--primary" id="emailBtn" href="mailto:{{ page.email }}">Email</a>
+        <a class="btn btn--primary" id="siteBtn" href="https://alicoempaques.com" target="_blank" rel="noopener">Sitio Web</a>
       </div>
     </header>
 
     <section class="info">
       <div class="row">
         <div class="icon"> 
-          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/phone.svg" alt="Teléfono" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/phone.svg" alt="Teléfono" width="28" height="28" loading="lazy" />
         </div>
         <div class="content">
           <div class="label">Teléfono</div>
@@ -126,7 +123,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/email.svg" alt="Email" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/email.svg" alt="Email" width="28" height="28" loading="lazy" />
         </div>
         <div class="content">
           <div class="label">Email</div>
@@ -150,7 +147,7 @@
 
       <div class="row">
         <div class="icon">
-          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/globe.svg" alt="Sitio web" onerror="this.style.display='none'" />
+          <img class="icon-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/globe.svg" alt="Sitio web" width="28" height="28" loading="lazy" />
         </div>
         <div class="content">
           <div class="label">Sitio web</div>
@@ -162,14 +159,14 @@
 
       <div class="socials">
         {% if page.linkedin %}
-        <a class="social" aria-label="linkedin" href="{{ page.linkedin }}" target="_blank" rel="noopener noreferrer" title="LinkedIn — ejemplo">
-          <img class="social-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/linkedin.svg" alt="LinkedIn" onerror="this.style.display='none'" />
+        <a class="social" aria-label="LinkedIn de {{ page.name }}" href="{{ page.linkedin }}" target="_blank" rel="noopener noreferrer">
+          <img class="social-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/linkedin.svg" alt="LinkedIn" width="56" height="56" loading="lazy" />
         </a>
         {% endif %}
 
         {% if page.whatsapp %}
-        <a class="social" aria-label="whatsapp" href="{{ page.whatsapp }}" target="_blank" rel="noopener noreferrer" title="WhatsApp — ejemplo">
-          <img class="social-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/whatsapp.svg" alt="WhatsApp" onerror="this.style.display='none'" />
+        <a class="social" aria-label="WhatsApp de {{ page.name }}" href="{{ page.whatsapp }}" target="_blank" rel="noopener noreferrer">
+          <img class="social-img" src="{{ site.url }}{{ site.baseurl }}/assets/icons/whatsapp.svg" alt="WhatsApp" width="56" height="56" loading="lazy" />
         </a>
         {% endif %}
       </div>
@@ -187,54 +184,94 @@
 
   </main>
 
-  <!-- Datos de la persona en JSON para ser leídos por el script (no es JS ejecutable, evita que Liquid rompa el parser) -->
   <script id="person-data" type="application/json">{{ page | jsonify | replace: "</", "<\\/" }}</script>
 
   <script>
-  // Usa los datos de la página leyendo el script[type=application/json]
-  document.addEventListener('DOMContentLoaded', function(){
+  // Optimized initialization - defer non-critical operations
+  (function(){
+    'use strict';
+    
     let PERSON = {};
     try{
       const el = document.getElementById('person-data');
-      if(el && el.textContent) PERSON = JSON.parse(el.textContent);
+      if(el?.textContent) PERSON = JSON.parse(el.textContent);
     }catch(e){
-      console.warn('No se pudo parsear person-data JSON', e);
-      PERSON = {};
+      console.warn('Parse error:', e);
     }
 
+    // Event handlers already work via href, but keep for JS enhancement
     const phone = PERSON.phone || '';
     const email = PERSON.email || '';
-  // Force website to the corporate URL regardless of front matter
-  const website = 'https://alicoempaques.com';
+    const website = 'https://alicoempaques.com';
 
     const callBtn = document.getElementById('callBtn');
     const emailBtn = document.getElementById('emailBtn');
     const siteBtn = document.getElementById('siteBtn');
 
-    if(callBtn){
-      callBtn.addEventListener('click', ()=>{ if(phone) window.location.href = `tel:${phone}`; });
-    }
-    if(emailBtn){
-      emailBtn.addEventListener('click', ()=>{ if(email) window.location.href = `mailto:${email}`; });
-    }
-    if(siteBtn){
-      siteBtn.addEventListener('click', ()=>{ if(website) window.open(website,'_blank'); });
+    // These are now fallbacks since href already set
+    if(callBtn && phone) callBtn.onclick = ()=> window.location.href = `tel:${phone}`;
+    if(emailBtn && email) emailBtn.onclick = ()=> window.location.href = `mailto:${email}`;
+    if(siteBtn && website) siteBtn.onclick = ()=> window.open(website,'_blank','noopener');
+
+    // Optimized avatar fallback system
+    function initialsSvg(name, size){
+      size = size || 300;
+      let initials = '';
+      if(name){
+        const parts = name.trim().split(/\s+/);
+        initials = (parts[0]||'').charAt(0) + (parts.length>1? (parts[parts.length-1]||'').charAt(0) : '');
+        initials = initials.toUpperCase();
+      }
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'><rect width='100%' height='100%' fill='#0628b5'/><text x='50%' y='50%' font-family='Montserrat,Arial,sans-serif' font-size='${Math.round(size/5)}' fill='#fff' dominant-baseline='middle' text-anchor='middle'>${initials}</text></svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
     }
 
-    // Convierte un elemento <img> (o su src) a base64 + mime
-    async function imageElementToBase64(img){
+    function tryLoadImage(url){
+      return new Promise((resolve, reject)=>{
+        if(!url) return reject();
+        const img = new Image();
+        img.onload = ()=> resolve(url);
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    function resolveAvatar(imgEl){
+      if(!imgEl) return;
+      const src = imgEl.getAttribute('data-avatar-url') || imgEl.src;
+      const fallbacks = (imgEl.getAttribute('data-fallbacks')||'').split(';').filter(Boolean);
+      const name = imgEl.getAttribute('data-name') || '';
+      
+      const candidates = [src, ...fallbacks];
+      
+      let chain = Promise.reject();
+      candidates.forEach(url => {
+        chain = chain.catch(()=> tryLoadImage(url));
+      });
+      
+      chain.catch(()=> initialsSvg(name, 300))
+        .then(finalUrl => { imgEl.src = finalUrl; })
+        .catch(()=> { imgEl.src = initialsSvg(name, 300); });
+    }
+
+    // Resolve avatar
+    const avatar = document.querySelector('img.avatar');
+    if(avatar) resolveAvatar(avatar);
+
+    // VCard download handler
+    async function imageToBase64(img){
       if(!img) return null;
-      const src = img.getAttribute('src') || img.src;
+      const src = img.src;
       if(!src) return null;
 
       if(src.startsWith('data:')){
         const comma = src.indexOf(',');
         const meta = src.substring(5, comma);
         const data = src.substring(comma + 1);
-        const isBase64 = meta.includes(';base64');
         const mime = meta.split(';')[0] || 'image/png';
+        const isBase64 = meta.includes(';base64');
         if(isBase64) return { mime, base64: data };
-        try{ const encoded = btoa(unescape(encodeURIComponent(decodeURIComponent(data)))); return { mime, base64: encoded }; }catch(e){ try{ return { mime, base64: btoa(data) }; }catch(e2){ return null; } }
+        try{ return { mime, base64: btoa(data) }; }catch(e){ return null; }
       }
 
       try{
@@ -242,206 +279,79 @@
         if(!resp.ok) return null;
         const blob = await resp.blob();
         const mime = blob.type || 'image/jpeg';
-        return await new Promise((resolve, reject)=>{
+        return new Promise((resolve)=>{
           const reader = new FileReader();
           reader.onloadend = ()=>{
-            const result = reader.result; // data:<mime>;base64,<data>
-            const comma = result.indexOf(',');
-            const base64 = result.substring(comma + 1);
+            const result = reader.result;
+            const base64 = result.substring(result.indexOf(',') + 1);
             resolve({ mime, base64 });
           };
-          reader.onerror = reject;
+          reader.onerror = ()=> resolve(null);
           reader.readAsDataURL(blob);
         });
-      }catch(err){
+      }catch(e){
         return null;
       }
     }
 
-    // vCard download
     const downloadLink = document.getElementById('downloadVcard');
     if(downloadLink){
-      downloadLink.addEventListener('click', async function(e){
+      downloadLink.onclick = async function(e){
         e.preventDefault();
 
         const fullName = PERSON.name || 'Sin nombre';
-        const title = PERSON.role || '';
-        const phoneVal = PERSON.phone || '';
-        const emailVal = PERSON.email || '';
-  const websiteVal = 'https://alicoempaques.com';
-        const cityVal = PERSON.city || '';
-        const companyVal = PERSON.company || '';
-
-        const lines = [];
-        lines.push('BEGIN:VCARD');
-        lines.push('VERSION:3.0');
+        const lines = ['BEGIN:VCARD','VERSION:3.0'];
+        
         const names = (fullName || '').split(' ');
         const first = names.shift() || '';
         const last = names.join(' ') || '';
         lines.push(`N:${last};${first};;;`);
         lines.push(`FN:${fullName}`);
-        if(title) lines.push(`TITLE:${title}`);
-        if(companyVal) lines.push(`ORG:${companyVal}`);
-        if(phoneVal) lines.push(`TEL;TYPE=CELL:${phoneVal}`);
-        if(emailVal) lines.push(`EMAIL;TYPE=INTERNET:${emailVal}`);
-        if(cityVal) lines.push(`ADR;TYPE=WORK:;;;${cityVal};;;;`);
-        if(websiteVal) lines.push(`URL:${websiteVal}`);
+        
+        if(PERSON.role) lines.push(`TITLE:${PERSON.role}`);
+        if(PERSON.company) lines.push(`ORG:${PERSON.company}`);
+        if(PERSON.phone) lines.push(`TEL;TYPE=CELL:${PERSON.phone}`);
+        if(PERSON.email) lines.push(`EMAIL;TYPE=INTERNET:${PERSON.email}`);
+        if(PERSON.city) lines.push(`ADR;TYPE=WORK:;;;${PERSON.city};;;;`);
+        lines.push(`URL:https://alicoempaques.com`);
 
         try{
-          const avatar = document.querySelector('.avatar');
-          const imgInfo = await imageElementToBase64(avatar);
-          if(imgInfo && imgInfo.base64){
-            let typePart = 'JPEG';
-            try{ const sub = (imgInfo.mime || '').split('/')[1] || ''; typePart = sub.split('+')[0].toUpperCase() || 'JPEG'; }catch(e){}
+          const imgInfo = await imageToBase64(avatar);
+          if(imgInfo?.base64){
+            const typePart = (imgInfo.mime?.split('/')[1]?.split('+')[0] || 'JPEG').toUpperCase();
             lines.push(`PHOTO;ENCODING=b;TYPE=${typePart}:${imgInfo.base64}`);
           }
-        }catch(err){ console.warn('No se pudo incluir foto en vCard', err); }
+        }catch(e){}
 
         lines.push('END:VCARD');
 
-        const vcardString = lines.join('\r\n');
-        const blob = new Blob([vcardString], {type: 'text/vcard;charset=utf-8'});
+        const blob = new Blob([lines.join('\r\n')], {type: 'text/vcard;charset=utf-8'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        const safeName = (fullName || 'contact').replace(/[^a-z0-9\-_\. ]/ig,'_');
-        a.download = `${safeName}.vcf`;
-        document.body.appendChild(a);
+        a.download = `${fullName.replace(/[^a-z0-9\-_\. ]/ig,'_')}.vcf`;
         a.click();
-        a.remove();
-        setTimeout(()=> URL.revokeObjectURL(url), 1500);
-      });
+        setTimeout(()=> URL.revokeObjectURL(url), 100);
+      };
     }
-  });
-  </script>
-  <script>
-  // Fallback adicional: si el archivo se abre sin procesar por Jekyll (p.ej. directamente),
-  // muchos atributos src pueden contener Liquid sin procesar (contienen '{').
-  // Este script busca esas imágenes y las reemplaza por rutas públicas en /assets/icons/ o por el avatar por defecto.
-  (function(){
-    try{
-      // Improved fallback loader for avatars and icons when Liquid isn't processed.
-      function isUrlAbsolute(u){ return typeof u === 'string' && (u.indexOf('://') !== -1 || u.indexOf('//') === 0); }
 
-      // generate an SVG data URL with the initials from a name
-      function initialsSvgDataUrl(name, size){
-        size = size || 300;
-        var initials = '';
-        if(name){
-          var parts = name.trim().split(/\s+/);
-          initials = (parts[0] || '').charAt(0) + (parts.length>1? (parts[parts.length-1]||'').charAt(0) : '');
-          initials = initials.toUpperCase();
-        }
-        var bg = '#0628b5';
-        var fg = '#fff';
-        var fontSize = Math.round(size/5);
-        var svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'><rect width='100%' height='100%' fill='${bg}' /><text x='50%' y='50%' font-family='Montserrat,Arial,sans-serif' font-size='${fontSize}' fill='${fg}' dominant-baseline='middle' text-anchor='middle'>${initials}</text></svg>`;
-        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-      }
-
-      // attempt to load an image, resolving relative URLs if needed. Returns a Promise that resolves when loaded or rejects.
-      function loadImage(url){
-        return new Promise(function(resolve,reject){
-          if(!url) return reject(new Error('empty url'));
-          var img = new Image();
-          img.onload = function(){ resolve(url); };
-          img.onerror = function(){ reject(new Error('failed to load ' + url)); };
-          img.src = url;
-        });
-      }
-
-      // For avatars: try the current src, then fallbacks listed in data-fallbacks, finally generate initials SVG
-      function resolveAvatar(imgEl){
-        if(!imgEl) return Promise.resolve(null);
-        var src = imgEl.getAttribute('src') || imgEl.src || '';
-        var fallbacks = (imgEl.getAttribute('data-fallbacks')||'').split(';').filter(Boolean);
-        var name = imgEl.getAttribute('data-name') || '';
-        var candidates = [];
-        if(src) candidates.push(src);
-        candidates = candidates.concat(fallbacks);
-
-        // try each candidate in sequence
-        var p = Promise.reject();
-        candidates.forEach(function(c){
-          p = p.catch(function(){
-            var url = c;
-            // if it's a site-relative path (starts with /) and the page was served from file://, leave it; otherwise prefix with site origin if available
-            return loadImage(url);
-          });
-        });
-
-        // final fallback: initials SVG
-        p = p.catch(function(){ return initialsSvgDataUrl(name, 300); });
-
-        return p.then(function(finalUrl){
-          // apply result to the element
-          try{ imgEl.src = finalUrl; }catch(e){}
-          return finalUrl;
-        }).catch(function(){
-          var svg = initialsSvgDataUrl(name,300);
-          imgEl.src = svg;
-          return svg;
-        });
-      }
-
-      // run resolution for the avatar image on the page
-      document.querySelectorAll('img.avatar').forEach(function(img){
-        try{ resolveAvatar(img); }catch(e){}
-      });
-
-      // keep a light fallback for other icons that might include unprocessed Liquid markers
-      function fixSrc(img){
-        if(!img) return;
-        var raw = img.getAttribute('src') || img.src || '';
-        if(!raw) return;
-        if(raw.indexOf('{') !== -1 || raw.indexOf('%7B') !== -1){
-          var alt = (img.getAttribute('alt')||'').toLowerCase();
-          if(alt.indexOf('tel') !== -1 || alt.indexOf('teléfono') !== -1 || alt.indexOf('phone') !== -1){
-            img.src = '/assets/icons/phone.svg';
-          }else if(alt.indexOf('email') !== -1){
-            img.src = '/assets/icons/email.svg';
-          }else if(alt.indexOf('cargo') !== -1 || alt.indexOf('briefcase') !== -1){
-            img.src = '/assets/icons/briefcase.svg';
-          }else if(alt.indexOf('sitio') !== -1 || alt.indexOf('web') !== -1 || alt.indexOf('globe') !== -1){
-            img.src = '/assets/icons/globe.svg';
-          }else if(alt.indexOf('linkedin') !== -1){
-            img.src = '/assets/icons/linkedin.svg';
-          }else if(alt.indexOf('whatsapp') !== -1){
-            img.src = '/assets/icons/whatsapp.svg';
-          }else if(img.classList && img.classList.contains('avatar')){
-            // avatar generic fallback
-            img.src = '/fotos/Prueba.jpg';
-          }else{
-            // remove broken src to avoid further 404s
-            img.removeAttribute('src');
-          }
-        }
-      }
-      var imgs = document.querySelectorAll('img');
-      imgs.forEach(fixSrc);
-    }catch(e){ console.warn('Fallback icon fixer failed', e); }
-  })();
-  </script>
-  <script>
-    // Enviar visita (versión simple, no-cors) usando la URL existente
-    (function(){
+    // Analytics - non-blocking with timeout
+    setTimeout(()=>{
       try{
-        var AS_URL = 'https://script.google.com/macros/s/AKfycbxCEmqnvMouAE-boKdW9lDAcZ3GmJh8I9N48a5TxQ0XDAiBmXPSfZzahDMzhpFO_JCNUg/exec';
-        var now = new Date();
-        var data = {
-          fecha: now.toISOString().slice(0,10),
-          hora: now.toTimeString().slice(0,8),
-          pagina: window.location.href
+        const data = {
+          fecha: new Date().toISOString().slice(0,10),
+          hora: new Date().toTimeString().slice(0,8),
+          pagina: location.href
         };
-
-        fetch(AS_URL, {
+        fetch('https://script.google.com/macros/s/AKfycbxCEmqnvMouAE-boKdW9lDAcZ3GmJh8I9N48a5TxQ0XDAiBmXPSfZzahDMzhpFO_JCNUg/exec', {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(data)
-        });
-      }catch(e){ console.warn('simple visit post failed', e); }
-    })();
+        }).catch(()=>{});
+      }catch(e){}
+    }, 1000);
+  })();
   </script>
 </body>
 </html>
