@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Alexander Franco"
-role: "Asesor comercial"
+role: "Asesor comercial - Alico S.A.S BIC"
 phone: "+57 316 8005402"
 email: "johnfranco@alico-sa.com"
 website: "https://alicoempaques.com"
