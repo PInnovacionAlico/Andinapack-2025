@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{{ page.name }} — {{ site.title }}</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/socials.css">
   <style>
   /* Inline styles from css/styles.css to ensure they load on GitHub Pages and file:// previews */
   :root{
@@ -19,7 +20,7 @@
   .ecard{width:100%;max-width:420px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(2,6,23,0.08);display:flex;flex-direction:column}
   .ecard__header{padding:28px 20px 12px 20px;text-align:center;position:relative}
   .hero-bg{height:80px;background:linear-gradient(180deg,var(--blue-900),#2a45d9);border-bottom-left-radius:60% 40px;border-bottom-right-radius:60% 40px;position:absolute;left:0;right:0;top:0}
-  .avatar-wrap{position:relative;margin:0 auto;width:140px;height:140px;border-radius:50%;transform:translateY(28px);overflow:hidden;background:#fff;padding:6px;box-shadow:0 4px 12px rgba(2,6,23,0.08)}
+  .avatar-wrap{position:relative;margin:40px auto 0 auto;width:140px;height:140px;border-radius:50%;transform:translateY(28px);overflow:hidden;background:#fff;padding:6px;box-shadow:0 4px 12px rgba(2,6,23,0.08)}
   .avatar{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
   .name{margin:44px 0 6px 0;font-family:Merriweather,serif;font-size:24px;color:#111}
   .role{margin:0;color:var(--muted);font-size:14px}
@@ -68,6 +69,9 @@
   <main class="ecard">
     <header class="ecard__header">
       <div class="hero-bg" aria-hidden="true"></div>
+      <div style="width:100%;display:flex;justify-content:center;margin-bottom:10px;position:absolute;left:0;right:0;top:16px;z-index:10;pointer-events:none;">
+        <img src="{{ site.url }}{{ site.baseurl }}/assets/icons/alico.png" alt="Logo Alico" style="height:48px;max-width:160px;object-fit:contain;pointer-events:auto;" />
+      </div>
       {% comment %} derive slug and avatar candidates: prefer page.image (absolute or relative), otherwise try /fotos/<slug>.(jpg|png), then a default icon. JS will try fallbacks and generate an initials SVG as last resort. {% endcomment %}
       {% assign person_slug = page.slug %}
       {% if person_slug == nil or person_slug == '' %}
