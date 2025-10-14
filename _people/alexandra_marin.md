@@ -7,7 +7,7 @@ email: "mmarin@alico-sa.com"
 website: "https://alicoempaques.com"
 city: "Bogotá"
 company: "Alico S.A.S. BIC"
-linkedin: "https://co.linkedin.com/company/alico-s-a-s"
+linkedin: "http://linkedin.com/in/alexandramarincasta%C3%B1o"
 whatsapp: "https://wa.me/573185915036?text=Hola%20Alexandra"
 ---
 

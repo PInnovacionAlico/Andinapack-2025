@@ -1,14 +1,14 @@
 ---
 layout: person
-name: "Diana Causil"
+name: "Karina Osorio"
 role: "Asesora comercial - Alico S.A.S BIC"
-phone: "+57 315 8293173"
-email: "dcausil@alico-sa.com"
+phone: "+57 316 4785166"
+email: "kosorio@alico-sa.com"
 website: "https://alicoempaques.com"
 city: "Bogotá"
 company: "Alico S.A.S. BIC"
 linkedin: "https://co.linkedin.com/company/alico-s-a-s"
-whatsapp: "https://wa.me/573158293173?text=Hola%20Diana"
+whatsapp: "https://wa.me/573164785166?text=Hola%20Karina"
 ---
 
-Ficha de contacto para Diana Causil.
+Ficha de contacto para Karina Osorio.

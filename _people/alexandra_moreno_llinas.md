@@ -7,7 +7,7 @@ email: "amoreno@alico-sa.com"
 website: "https://alicoempaques.com"
 city: "Barranquilla"
 company: "Alico S.A.S. BIC"
-linkedin: "https://co.linkedin.com/company/alico-s-a-s"
+linkedin: "https://www.linkedin.com/in/alexandra-moreno-llinas-comercial/"
 whatsapp: "https://wa.me/573174230967?text=Hola%20Alexandra"
 ---
 
