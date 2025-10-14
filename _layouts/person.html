@@ -86,17 +86,16 @@
           {% assign avatar_url = avatar_raw | relative_url %}
         {% endif %}
       {% else %}
-        {% assign avatar_url = '/fotos/' | append: person_slug | append: '.jpg' | relative_url %}
+        {% assign avatar_url = '/fotos/' | append: person_slug | append: '.jpeg' | relative_url %}
       {% endif %}
 
-      {% assign fallback_jpg = '/fotos/' | append: person_slug | append: '.jpg' | relative_url %}
-      {% assign fallback_png = '/fotos/' | append: person_slug | append: '.png' | relative_url %}
+      {% assign fallback_jpeg = '/fotos/' | append: person_slug | append: '.jpeg' | relative_url %}
       {% assign fallback_icon = '/assets/icons/briefcase.svg' | relative_url %}
 
       <div class="avatar-wrap">
         <img src="{{ avatar_url }}" alt="Avatar" class="avatar"
           data-avatar-url="{{ avatar_url }}"
-          data-fallbacks="{{ fallback_jpg }};{{ fallback_png }};{{ fallback_icon }}"
+          data-fallbacks="{{ fallback_jpeg }};{{ fallback_icon }}"
           data-slug="{{ person_slug }}"
           data-name="{{ page.name | escape }}" />
       </div>
@@ -362,21 +361,18 @@
         if(src) candidates.push(src);
         candidates = candidates.concat(fallbacks);
 
-        // try all candidates in parallel
+        // Solo .jpeg y el icono
         var promises = candidates.map(function(c){
-          return loadImage(c, 3000); // 3 second timeout per image
+          return loadImage(c, 2000); // 2 segundos de timeout por imagen
         });
 
-        // race them: first to resolve wins
         var racePromise = Promise.race(promises);
 
-        // if all fail, fall back to SVG
         var finalPromise = racePromise.catch(function(){
           return initialsSvgDataUrl(name, 300);
         });
 
         return finalPromise.then(function(finalUrl){
-          // apply result to the element
           try{ imgEl.src = finalUrl; }catch(e){}
           return finalUrl;
         }).catch(function(){
