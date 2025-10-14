@@ -1,6 +1,6 @@
 ---
 layout: person
-name: "Catalina Aristizabal"
+name: "Catalina Aristizábal"
 role: "Subgerente mercadeo y ventas - Alico S.A.S BIC"
 phone: "+57 3174310231"
 email: "caristizabal@alico-sa.com"
