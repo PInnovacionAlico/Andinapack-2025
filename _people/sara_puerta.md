@@ -7,7 +7,7 @@ email: "spuerta@alico-sa.com"
 website: "https://alicoempaques.com"
 city: "Medellín"
 company: "Alico S.A.S. BIC"
-linkedin: "https://co.linkedin.com/company/alico-s-a-s"
+linkedin: "https://www.linkedin.com/in/sara-puerta-estrada-7a4998248/"
 whatsapp: "https://wa.me/573194716695?text=Hola%20Sara"
 ---
 
