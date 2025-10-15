@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function(){
   imgs.forEach(fixSrc);
   // Registro de visita (simple, no-cors)
   try{
-    var AS_URL = 'https://script.google.com/macros/s/AKfycbxCEmqnvMouAE-boKdW9lDAcZ3GmJh8I9N48a5TxQ0XDAiBmXPSfZzahDMzhpFO_JCNUg/exec';
+    var AS_URL = 'https://script.google.com/macros/s/AKfycbydeG4IFtBSql_s-hdnHuAWUPHkmyCRD0Ummjy8kviWKo5R-iQPfEXnXHayOgslSGNQXw/exec';
     var now = new Date();
     var data = {
       fecha: now.toISOString().slice(0,10),
