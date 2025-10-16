@@ -160,13 +160,14 @@ document.addEventListener('DOMContentLoaded', function(){
     var AS_URL = 'https://script.google.com/macros/s/AKfycbxCEmqnvMouAE-boKdW9lDAcZ3GmJh8I9N48a5TxQ0XDAiBmXPSfZzahDMzhpFO_JCNUg/exec';
     var now = new Date();
     
-    // Formatear fecha en zona horaria local (Colombia)
+    // Formatear fecha y hora en zona horaria local (Colombia)
+    function pad(n) { return n < 10 ? '0' + n : n; }
     var year = now.getFullYear();
-    var month = String(now.getMonth() + 1).padStart(2, '0');
-    var day = String(now.getDate()).padStart(2, '0');
-    var hours = String(now.getHours()).padStart(2, '0');
-    var minutes = String(now.getMinutes()).padStart(2, '0');
-    var seconds = String(now.getSeconds()).padStart(2, '0');
+    var month = pad(now.getMonth() + 1);
+    var day = pad(now.getDate());
+    var hours = pad(now.getHours());
+    var minutes = pad(now.getMinutes());
+    var seconds = pad(now.getSeconds());
     
     var data = {
       fecha: year + '-' + month + '-' + day,
