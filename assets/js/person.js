@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function(){
   imgs.forEach(fixSrc);
   // Registro de visita (simple, no-cors)
   try{
-    var AS_URL = 'https://script.google.com/macros/s/AKfycbxCEmqnvMouAE-boKdW9lDAcZ3GmJh8I9N48a5TxQ0XDAiBmXPSfZzahDMzhpFO_JCNUg/exec';
+    var AS_URL = 'https://script.google.com/macros/s/AKfycbwxW6QeTibOSZwb20uIndbXbLh6WJN-Gu8ruoDxzZp0LBvazPVs28dA-C6LG0Lu6p2E6w/exec';
     var now = new Date();
     
     // Formatear fecha y hora en zona horaria local (Colombia)
