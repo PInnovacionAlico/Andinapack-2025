@@ -157,11 +157,20 @@ document.addEventListener('DOMContentLoaded', function(){
   imgs.forEach(fixSrc);
   // Registro de visita (simple, no-cors)
   try{
-    var AS_URL = 'https://script.google.com/macros/s/AKfycbyzgq5QZh1UNxW5DZllCLSmw70Y_D2nwTYj-IaDb2ZGnghvEhx9jikyP9dWQFFhrdPfoA/exec';
+    var AS_URL = 'https://script.google.com/macros/s/AKfycbxCEmqnvMouAE-boKdW9lDAcZ3GmJh8I9N48a5TxQ0XDAiBmXPSfZzahDMzhpFO_JCNUg/exec';
     var now = new Date();
+    
+    // Formatear fecha en zona horaria local (Colombia)
+    var year = now.getFullYear();
+    var month = String(now.getMonth() + 1).padStart(2, '0');
+    var day = String(now.getDate()).padStart(2, '0');
+    var hours = String(now.getHours()).padStart(2, '0');
+    var minutes = String(now.getMinutes()).padStart(2, '0');
+    var seconds = String(now.getSeconds()).padStart(2, '0');
+    
     var data = {
-      fecha: now.toISOString().slice(0,10),
-      hora: now.toTimeString().slice(0,8),
+      fecha: year + '-' + month + '-' + day,
+      hora: hours + ':' + minutes + ':' + seconds,
       pagina: window.location.href
     };
     fetch(AS_URL, {
