@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function(){
       initials = (parts[0] || '').charAt(0) + (parts.length>1? (parts[parts.length-1]||'').charAt(0) : '');
       initials = initials.toUpperCase();
     }
-    var bg = '#0628b5';
+    var bg = window.CUSTOM_AVATAR_COLOR || '#0628b5';
     var fg = '#fff';
     var fontSize = Math.round(size/5);
     var svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'><rect width='100%' height='100%' fill='${bg}' /><text x='50%' y='50%' font-family='Montserrat,Arial,sans-serif' font-size='${fontSize}' fill='${fg}' dominant-baseline='middle' text-anchor='middle'>${initials}</text></svg>`;

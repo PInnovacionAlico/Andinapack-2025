@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Juan Esteban Sánchez — Domus Lumen</title>
+  <link rel="icon" type="image/png" href="../assets/icons/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/person.css">
+  <style>
+    /* Personalización de colores para Domus Lumen */
+    .hero-bg {
+      background: linear-gradient(135deg, #13182c 0%, #0d1120 100%) !important;
+    }
+    .btn--primary,
+    #callBtn,
+    #siteBtn {
+      background-color: #13182c !important;
+      border-color: #13182c !important;
+      color: #ffffff !important;
+    }
+    .btn--primary:hover,
+    #callBtn:hover,
+    #siteBtn:hover {
+      background-color: #0d1120 !important;
+      border-color: #0d1120 !important;
+    }
+    hr {
+      border-color: #13182c !important;
+      opacity: 0.2;
+    }
+    svg path,
+    svg circle {
+      stroke: #13182c !important;
+    }
+    .download-footer {
+      background-color: #13182c !important;
+    }
+    .icon-img {
+      filter: brightness(0) saturate(100%) invert(7%) sepia(18%) saturate(3573%) hue-rotate(201deg) brightness(96%) contrast(92%);
+    }
+    .download-footer__link {
+      color: #ffffff !important;
+    }
+    .download-footer__icon svg path {
+      fill: #ffffff !important;
+    }
+    /* Color de fondo del avatar cuando no hay foto - usar selectores muy específicos */
+    .avatar-wrap .avatar[style*="background"] {
+      background-color: #13182c !important;
+      background: #13182c !important;
+    }
+    .avatar[data-name]::before {
+      color: #ffffff !important;
+    }
+  </style>
+</head>
+<body>
+  <main class="ecard">
+    <header class="ecard__header">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div style="width:100%;display:flex;justify-content:center;margin-bottom:10px;position:absolute;left:0;right:0;top:0px;z-index:10;pointer-events:none;">
+        <img src="../assets/logos/Domus_Lumen.png" alt="Logo Domus Lumen" style="height:72px;max-width:220px;object-fit:contain;pointer-events:auto;" />
+      </div>
+      <div class="avatar-wrap">
+        <img src="../fotos/juan_esteban_sanchez.jpeg" alt="Avatar" class="avatar" data-name="Juan Esteban Sánchez" />
+      </div>
+      <h1 class="name">Juan Esteban Sánchez</h1>
+      <p class="role">Domus Lumen</p>
+      <div class="ctas">
+        <a class="btn btn--primary" id="callBtn" style="background: #13182c !important; border-color: #13182c !important;">Teléfono</a>
+      </div>
+    </header>
+    <section class="info">
+      <div class="row">
+        <div class="icon">
+          <img class="icon-img" src="../assets/icons/phone.svg" alt="Teléfono" onerror="this.style.display='none'" />
+        </div>
+        <div class="content">
+          <div class="label">Teléfono</div>
+          <div class="value">+57 3002216757</div>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" stroke="#13182c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="#13182c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="content">
+          <div class="label">Ciudad</div>
+          <div class="value">Medellín</div>
+        </div>
+      </div>
+    </section>
+    <div class="socials">
+      <a class="social" aria-label="whatsapp" href="https://wa.me/573002216757?text=Hola%20Juan%20Esteban" target="_blank" rel="noopener noreferrer" title="WhatsApp">
+        <img class="social-img" src="../assets/icons/whatsapp.svg" alt="WhatsApp" onerror="this.style.display='none'" />
+      </a>
+    </div>
+    <footer class="download-footer" role="contentinfo" style="background: #13182c !important;">
+      <a id="downloadVcard" class="download-footer__link" href="#" title="Descargar VCard" style="color: #ffffff !important;">
+        <span class="download-footer__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#ffffff" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"/></svg>
+        </span>
+        <span class="download-footer__text">Descargar VCard</span>
+      </a>
+    </footer>
+  </main>
+  <script id="person-data" type="application/json">{"name":"Juan Esteban Sánchez","role":"Domus Lumen", "phone":"+57 3002216757","city":"Medellín","company":"Domus Lumen", "whatsapp":"https://wa.me/573002216757?text=Hola%20Juan%20Esteban"}</script>
+  <script>
+    // Sobrescribir color del avatar antes de cargar person.js
+    window.CUSTOM_AVATAR_COLOR = '#13182c';
+  </script>
+  <script src="../assets/js/person.js"></script>
+</body>
+</html>
